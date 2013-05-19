@@ -22,43 +22,24 @@ Using composer, add the following to composer.json:
 }
 ````
 
-}
-
 ## Usage
 
 ```php
 <?php
 
 use Bytes\Docraptor\Document\PdfDocument;
-
-$document = new PdfDocument('Document 1');
-$document
-	->setContent($html)
-	->setStrictMode(false)
-;
-
-// ----------------------------------------------------------------------------
-
 use Bytes\Docraptor\Http\Client as HttpClient;
 use Bytes\Docraptor\Client;
 
-$client = new Client(new HttpClient(), '4pik3y');
+$document = new PdfDocument('<Document name>');
+$document->setContent($html);
+
+$httpClient = new HttpClient();
+$client = new Client($httpClient, '<4pik3y>');
 
 try {
 	$pdf = $client->convert($document);
 } catch (DocraptorException $e) {
 
 }
-
-// ----------------------------------------------------------------------------
-
-try {
-	$pdf = $this->get('docraptor')->convert($document);
-} catch (DocraptorException $e) {
-
-}
 ```
-
-## License
-
-This project is licensed under the MIT license.
