@@ -79,7 +79,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     /**
      * Assert that by default the test mode is enabled
      */
-    public function testDefaultTestmode()
+    public function testDefaultTestMode()
     {
         $httpClient = $this->_getHttpClientMock(null);
 
@@ -118,7 +118,63 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test interactiosn between docraptor client and http client
+     * Assert that by default the async mode is disabled
+     */
+    public function testDefaultAsyncMode()
+    {
+        $httpClient = $this->_getHttpClientMock(null);
+
+        $client = new Client($httpClient, '4pik3y');
+
+        $this->assertEquals(false, $client->getAsyncMode());
+    }
+
+    /**
+     * Test setting the async mode to a valid value
+     */
+    public function testSettingValidAsnycMode()
+    {
+        $httpClient = $this->_getHttpClientMock(null);
+
+        $client = new Client($httpClient, '4pik3y');
+
+        $this->assertEquals(false, $client->getAsyncMode());
+
+        $client->setAsyncMode(true);
+
+        $this->assertEquals(true, $client->getAsyncMode());
+    }
+
+    /**
+     * Assert that by default the callback url is null
+     */
+    public function testDefaultCallbackUrl()
+    {
+        $httpClient = $this->_getHttpClientMock(null);
+
+        $client = new Client($httpClient, '4pik3y');
+
+        $this->assertEquals(null, $client->getCallbackUrl());
+    }
+
+    /**
+     * Test setting the callback url to a valid value
+     */
+    public function testSettingValidCallbackUrl()
+    {
+        $httpClient = $this->_getHttpClientMock(null);
+
+        $client = new Client($httpClient, '4pik3y');
+
+        $this->assertEquals(null, $client->getCallbackUrl());
+
+        $client->setCallbackUrl('http://www.mydomain.com/mypath');
+
+        $this->assertEquals('http://www.mydomain.com/mypath', $client->getCallbackUrl());
+    }
+
+    /**
+     * Test interaction between docraptor client and http client
      */
     public function testSendDocument()
     {

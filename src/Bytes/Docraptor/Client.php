@@ -31,6 +31,20 @@ class Client implements ClientInterface
      */
     private $_testMode;
 
+    /**
+     * Flag indicating mode of asynchronous job
+     *
+     * @var boolean
+     */
+    private $_asyncMode;
+
+    /**
+     * The optional callback url if querying as asynchronous job
+     *
+     * @var string
+     */
+    private $_callbackUrl;
+
 
     /**
      * Create new client
@@ -40,6 +54,7 @@ class Client implements ClientInterface
         $this->setHttpClient($httpClient);
         $this->setApiKey($apiKey);
         $this->setTestMode(false);
+        $this->setAsyncMode(false);
 
         $httpClient
             ->setBaseUrl('https://docraptor.com')
@@ -132,6 +147,56 @@ class Client implements ClientInterface
     }
 
     /**
+     * Set async job
+     *
+     * @param boolean $asyncMode Flag indicating the async mode
+     * @return Client
+     */
+    public function setAsyncMode($asyncMode)
+    {
+        if (!is_bool($asyncMode)) {
+            throw new \InvalidArgumentException('The asyncMode must be a boolean, '.gettype($asyncMode).' given.');
+        }
+
+        $this->_asyncMode = $asyncMode;
+
+        return $this;
+    }
+
+    /**
+     * Get test mode
+     *
+     * @return boolean
+     */
+    public function getAsyncMode()
+    {
+        return $this->_asyncMode;
+    }
+
+    /**
+     * Set callback url
+     *
+     * @param $callbackUrl
+     * @return Client
+     */
+    public function setCallbackUrl($callbackUrl)
+    {
+        $this->_callbackUrl = $callbackUrl;
+
+        return $this;
+    }
+
+    /**
+     * Returns callback url
+     *
+     * @return string
+     */
+    public function getCallbackUrl()
+    {
+        return $this->_callbackUrl;
+    }
+
+    /**
      * Convert document using docraptor API
      *
      * @param DocumentInterface $document The document to be converted
@@ -164,7 +229,41 @@ class Client implements ClientInterface
             }
         }
 
+        //If in async mode the response will be in json
+        if ($this->getAsyncMode()) {
+            return json_decode($response->getBody(true));
+        }
+
         return $response->getBody(true);
+    }
+
+    /**
+     * Returns status information for a document which has been converted in async mode.
+     *
+     * The status id is returned by the convert() method if a document is converted in async mode.
+     *
+     * @param string $statusId
+     * @return array
+     */
+    public function getStatus($statusId)
+    {
+        $request = $this->getHttpClient()->get('/status/'.$statusId);
+        $response = $request->send();
+
+        if ($response->getStatusCode() != 200) {
+            switch ($response->getStatusCode()) {
+                case 400:
+                    throw new Exception\BadRequestException();
+                case 401:
+                    throw new Exception\UnauthorizedException();
+                case 403:
+                    throw new Exception\ForbiddenException();
+                default:
+                    throw new Exception\UnexpectedValueException($response->getStatusCode());
+            }
+        }
+
+        return json_decode($response->getBody(true));
     }
 
     /**
@@ -175,12 +274,19 @@ class Client implements ClientInterface
      * @param array $parameters Document-specific parameters
      * @return array Merged parameters, giving precedence to client-parameters
      */
-    private function _buildParameters($parameters)
+    private function _buildParameters($docParameters)
     {
-        return array_replace_recursive($parameters, array(
+        $clientParameters = array(
             'doc' => array(
-                'test' => var_export($this->getTestMode(), true)
+                'test'         => var_export($this->getTestMode(),  true),
+                'async'        => var_export($this->getAsyncMode(), true),
             )
-        ));
+        );
+
+        if ($this->getAsyncMode() && null !== $this->getCallbackUrl()) {
+            $clientParameters['doc']['callback_url'] = $this->getCallbackUrl();
+        }
+
+        return array_replace_recursive($docParameters, $clientParameters);
     }
 }
