@@ -28,17 +28,49 @@ class PdfDocument extends AbstractDocument
 	}
 
 	/**
+	 * Set url
+	 *
+	 * @param string $url The URL to the page to be converted
+	 * @return PdfDocument
+	 */
+	public function setUrl($url)
+	{
+		$this->_url = $url;
+
+		return $this;
+	}
+
+	/**
+	 * Get url
+	 *
+	 * @return string The URL to the page to be converted
+	 */
+	public function getUrl()
+	{
+		return $this->_url;
+	}
+
+	/**
 	 * Construct an array of parameter-value pairs for this document
 	 *
 	 * @return array Multi-dimensional array of parameters
 	 */
 	public function getParameters()
 	{
-		return array_replace_recursive(array(
-			'doc' => array(
-				'document_type' => 'pdf',
-				'document_content' => $this->getContent()
-			)
-		), parent::getParameters());
+		if (null !== $this->getUrl()) {
+			return array_replace_recursive(array(
+				'doc' => array(
+					'document_type' => 'pdf',
+					'document_url' => $this->getUrl()
+				)
+			), parent::getParameters());
+		} else {
+			return array_replace_recursive(array(
+				'doc' => array(
+					'document_type' => 'pdf',
+					'document_content' => $this->getContent()
+				)
+			), parent::getParameters());
+		}
 	}
 }
