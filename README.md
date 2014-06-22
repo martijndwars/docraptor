@@ -17,7 +17,7 @@ Using composer, add the following to composer.json:
 ```yaml
 {
 	"require": {
-		"bytes/docraptor": "dev-master"
+		"bytes/docraptor": "dev-master@dev"
 	}
 }
 ````
