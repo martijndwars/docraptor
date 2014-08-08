@@ -4,6 +4,20 @@ namespace Bytes\Docraptor\Document;
 
 class PdfDocument extends AbstractDocument
 {
+    /**
+     * The (HTML) content to be converted
+     *
+     * @var string
+     */
+    protected $_content;
+
+    /**
+     * The URL to the page to be converted
+     *
+     * @var string
+     */
+    protected $_url;
+
 	/**
 	 * Set content
 	 *
