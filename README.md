@@ -1,10 +1,10 @@
-# PHP Docrapter API
+# PHP DocRapter API
 
-A simple client for the Docraptor API, written in PHP5.
+A simple client for the [DocRaptor](https://docraptor.com) API, written in PHP5.
 
 ## Features
 
-* Convert PDF documents through the Docraptor API.
+* Convert HTML to PDF and HTML to Excel through the DocRaptor API.
 
 ## Requirements
 

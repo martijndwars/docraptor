@@ -6,7 +6,7 @@ use Bytes\Docraptor\Http\ClientInterface as HttpClientInterface;
 use Bytes\Docraptor\Document\DocumentInterface;
 
 /**
- * Docraptor client
+ * DocRaptor client
  */
 class Client implements ClientInterface
 {
@@ -18,7 +18,7 @@ class Client implements ClientInterface
     private $_httpClient;
 
     /**
-     * Docraptor API key
+     * DocRaptor API key
      *
      * @var string
      */
@@ -60,7 +60,7 @@ class Client implements ClientInterface
             ->setBaseUrl('https://docraptor.com')
             ->setDefaultHeaders(array(
                 'Authorization' => 'Basic '.base64_encode($apiKey.':'),
-                'User-Agent' => 'Bytes Docraptor client',
+                'User-Agent' => 'Bytes DocRaptor client',
             ))
         ;
     }
@@ -91,7 +91,7 @@ class Client implements ClientInterface
     /**
      * Set API key
      *
-     * @param string $apiKey Docraptor API key
+     * @param string $apiKey DocRaptor API key
      * @return Client
      */
     public function setApiKey($apiKey)
@@ -197,7 +197,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * Convert document using docraptor API
+     * Convert document using DocRaptor API
      *
      * @param DocumentInterface $document The document to be converted
      * @return string The binary contents of the result after conversion

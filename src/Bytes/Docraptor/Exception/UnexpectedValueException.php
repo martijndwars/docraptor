@@ -6,6 +6,6 @@ class UnexpectedValueException extends \UnexpectedValueException implements Docr
 {
     public function __construct($code = 0)
     {
-        parent::__construct('Docraptor returned an unexpected response ('.$code.')', $code);
+        parent::__construct('DocRaptor returned an unexpected response ('.$code.')', $code);
     }
 }
