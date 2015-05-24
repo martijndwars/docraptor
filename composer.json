@@ -1,7 +1,7 @@
 {
     "name": "bytes/docraptor",
     "type": "library",
-    "description": "Docraptor API client",
+    "description": "DocRaptor API client",
     "keywords": ["docraptor", "api"],
     "homepage": "http://github.com/MartijnDwars/Docraptor",
     "license": "MIT",
