@@ -32,14 +32,16 @@ use Bytes\Docraptor\Http\Client as HttpClient;
 use Bytes\Docraptor\Client;
 
 $document = new PdfDocument('<Document name>');
+$html = '<some html goes here>';
 $document->setContent($html);
 
 $httpClient = new HttpClient();
-$client = new Client($httpClient, '<4pik3y>');
+$client = new Client($httpClient, 'YOUR_API_KEY_HERE');
 
 try {
-	$pdf = $client->convert($document);
+	$pdf = $client->setTestMode(true)->convert($document);
+	// write to file, stream to user, etc.
 } catch (DocraptorException $e) {
-
+        echo($e);
 }
 ```
